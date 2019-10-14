@@ -12,6 +12,8 @@ public class ImageMetadata {
     private Instant created;
     private String uri;
     private Integer numberOfComments;
+    private Integer numberOfRatings;
+    private Double avergeRating;
 
     public String getTitle() {
         return title;
@@ -75,5 +77,21 @@ public class ImageMetadata {
 
     public void setNumberOfComments(Integer numberOfComments) {
         this.numberOfComments = numberOfComments;
+    }
+
+    public Integer getNumberOfRatings() {
+        return numberOfRatings;
+    }
+
+    public void setNumberOfRatings(Integer numberOfRatings) {
+        this.numberOfRatings = numberOfRatings;
+    }
+
+    public Double getAvergeRating() {
+        return avergeRating;
+    }
+
+    public void setAvergeRating(Double avergeRating) {
+        this.avergeRating = avergeRating;
     }
 }

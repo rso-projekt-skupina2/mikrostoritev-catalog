@@ -45,7 +45,7 @@ public class ImageMetadataBean {
 
     public List<ImageMetadata> getImageMetadata() {
 
-        TypedQuery<ImageMetadataEntity> query = em.createNamedQuery("ImageMetadataEntiry.getAll",
+        TypedQuery<ImageMetadataEntity> query = em.createNamedQuery("ImageMetadataEntity.getAll",
                 ImageMetadataEntity.class);
 
         return query.getResultList().stream().map(ImageMetadataConverter::toDto).collect(Collectors.toList());
@@ -71,6 +71,8 @@ public class ImageMetadataBean {
 
         ImageMetadata imageMetadata = ImageMetadataConverter.toDto(imageMetadataEntity);
         imageMetadata.setNumberOfComments(getCommentCount(id));
+        imageMetadata.setNumberOfRatings(getRatingCount(id));
+        imageMetadata.setAvergeRating(getAvergeRating(id));
 
         return imageMetadata;
     }
@@ -141,6 +143,34 @@ public class ImageMetadataBean {
             return httpClient
                     .target(baseUrl + "/v1/comments/count?imageId=" + imageId)
                     .request().get(new GenericType<Integer>() {
+                    });
+        } catch (WebApplicationException | ProcessingException e) {
+            log.severe(e.getMessage());
+            throw new InternalServerErrorException(e);
+        }
+
+    }
+
+    public Integer getRatingCount(Integer imageId) {
+
+        try {
+            return httpClient
+                    .target(baseUrl + "/v1/rating/count?imageId=" + imageId)
+                    .request().get(new GenericType<Integer>() {
+                    });
+        } catch (WebApplicationException | ProcessingException e) {
+            log.severe(e.getMessage());
+            throw new InternalServerErrorException(e);
+        }
+
+    }
+
+    public Double getAvergeRating(Integer imageId) {
+
+        try {
+            return httpClient
+                    .target(baseUrl + "/v1/rating/averge?imageId=" + imageId)
+                    .request().get(new GenericType<Double>() {
                     });
         } catch (WebApplicationException | ProcessingException e) {
             log.severe(e.getMessage());
