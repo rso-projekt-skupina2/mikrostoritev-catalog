@@ -1,13 +1,16 @@
 package si.fri.rso.samples.imagecatalog.services.beans;
 
+import com.kumuluz.ee.discovery.annotations.DiscoverService;
 import com.kumuluz.ee.rest.beans.QueryParameters;
 import com.kumuluz.ee.rest.utils.JPAUtils;
 import si.fri.rso.samples.imagecatalog.lib.ImageMetadata;
 import si.fri.rso.samples.imagecatalog.models.converters.ImageMetadataConverter;
 import si.fri.rso.samples.imagecatalog.models.entities.ImageMetadataEntity;
+import si.fri.rso.samples.imagecatalog.services.config.IntegrationProperties;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -20,11 +23,12 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.UriInfo;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 
-@ApplicationScoped
+@RequestScoped
 public class ImageMetadataBean {
 
     private Logger log = Logger.getLogger(ImageMetadataBean.class.getName());
@@ -34,12 +38,16 @@ public class ImageMetadataBean {
 
     private Client httpClient;
 
-    private String baseUrl;
+    @Inject
+    @DiscoverService("comments-service")
+    private Optional<String> baseUrl;
+
+    @Inject
+    private IntegrationProperties integrationProperties;
 
     @PostConstruct
     private void init() {
         httpClient = ClientBuilder.newClient();
-        baseUrl = "http://localhost:8081"; // only for demonstration
     }
 
 
@@ -70,9 +78,11 @@ public class ImageMetadataBean {
         }
 
         ImageMetadata imageMetadata = ImageMetadataConverter.toDto(imageMetadataEntity);
-        imageMetadata.setNumberOfComments(getCommentCount(id));
-        imageMetadata.setNumberOfRatings(getRatingCount(id));
-        imageMetadata.setAvergeRating(getAvergeRating(id));
+        if (integrationProperties.isIntegrateWithCommentsService()) {
+            imageMetadata.setNumberOfComments(getCommentCount(id));
+            imageMetadata.setNumberOfRatings(getRatingCount(id));
+            imageMetadata.setAvergeRating(getAvergeRating(id));
+        }
 
         return imageMetadata;
     }
@@ -104,7 +114,7 @@ public class ImageMetadataBean {
             return null;
         }
 
-        ImageMetadataEntity updatedImageMetadataEntity = new ImageMetadataEntity();
+        ImageMetadataEntity updatedImageMetadataEntity = ImageMetadataConverter.toEntity(imageMetadata);
 
         try {
             beginTx();
@@ -138,45 +148,48 @@ public class ImageMetadataBean {
 
 
     public Integer getCommentCount(Integer imageId) {
-
-        try {
-            return httpClient
-                    .target(baseUrl + "/v1/comments/count?imageId=" + imageId)
-                    .request().get(new GenericType<Integer>() {
-                    });
-        } catch (WebApplicationException | ProcessingException e) {
-            log.severe(e.getMessage());
-            throw new InternalServerErrorException(e);
+        if (baseUrl.isPresent()) {
+            try {
+                return httpClient
+                        .target(baseUrl.get() + "/v1/comments/count?imageId=" + imageId)
+                        .request().get(new GenericType<Integer>() {
+                        });
+            } catch (WebApplicationException | ProcessingException e) {
+                log.severe(e.getMessage());
+                throw new InternalServerErrorException(e);
+            }
         }
-
+        return null;
     }
 
     public Integer getRatingCount(Integer imageId) {
-
-        try {
-            return httpClient
-                    .target(baseUrl + "/v1/rating/count?imageId=" + imageId)
-                    .request().get(new GenericType<Integer>() {
-                    });
-        } catch (WebApplicationException | ProcessingException e) {
-            log.severe(e.getMessage());
-            throw new InternalServerErrorException(e);
+        if (baseUrl.isPresent()) {
+            try {
+                return httpClient
+                        .target(baseUrl.get() + "/v1/rating/count?imageId=" + imageId)
+                        .request().get(new GenericType<Integer>() {
+                        });
+            } catch (WebApplicationException | ProcessingException e) {
+                log.severe(e.getMessage());
+                throw new InternalServerErrorException(e);
+            }
         }
-
+        return null;
     }
 
     public Double getAvergeRating(Integer imageId) {
-
-        try {
-            return httpClient
-                    .target(baseUrl + "/v1/rating/averge?imageId=" + imageId)
-                    .request().get(new GenericType<Double>() {
-                    });
-        } catch (WebApplicationException | ProcessingException e) {
-            log.severe(e.getMessage());
-            throw new InternalServerErrorException(e);
+        if (baseUrl.isPresent()) {
+            try {
+                return httpClient
+                        .target(baseUrl.get() + "/v1/rating/averge?imageId=" + imageId)
+                        .request().get(new GenericType<Double>() {
+                        });
+            } catch (WebApplicationException | ProcessingException e) {
+                log.severe(e.getMessage());
+                throw new InternalServerErrorException(e);
+            }
         }
-
+        return null;
     }
 
 

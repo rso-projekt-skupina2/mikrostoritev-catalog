@@ -13,3 +13,12 @@ kumuluzee:
       username: dbuser
       password: postgres
       max-pool-size: 20
+  discovery:
+    consul:
+      agent: http://localhost:8500
+      hosts: http://localhost:8500
+    ttl: 10
+    ping-interval: 5
+configuration-properties:
+  comments-service:
+    enabled: true
