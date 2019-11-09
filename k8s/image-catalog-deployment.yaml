@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: image-catalog-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: image-catalog
+  template:
+    metadata:
+      labels:
+        app: image-catalog
+    spec:
+      containers:
+        - image: baraba123/rso-image-catalog:1.0.0-SNAPSHOT-2.1
+          name: image-catalog
+          env:
+            - name: KUMULUZEE_DISCOVERY_CLUSTER
+              value: rso
+            - name: KUMULUZEE_DISCOVERY_CONSUL_HOSTS
+              value: http://consul:8500
+            - name: KUMULUZEE_DISCOVERY_CONSUL_AGENT
+              value: http://consul:8500
+            - name: KUMULUZEE_SERVER_BASEURL
+              value: http://52.146.59.235:8080
+            - name: KUMULUZEE_DATASOURCES0_CONNECTIONURL
+              value: jdbc:postgresql://40.114.72.255:5432/image-metadata
+            - name: KUMULUZEE_DATASOURCES0_USERNAME
+              value: dbuser
+            - name: KUMULUZEE_DATASOURCES0_PASSWORD
+              value: postgres123!
+          ports:
+            - containerPort: 8080
+              name: server
+              protocol: TCP
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: image-catalog
+spec:
+  type: LoadBalancer
+  selector:
+    app: image-catalog
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: server
