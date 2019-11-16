@@ -23,13 +23,13 @@ spec:
             - name: KUMULUZEE_DISCOVERY_CONSUL_AGENT
               value: http://consul:8500
             - name: KUMULUZEE_SERVER_BASEURL
-              value: http://52.146.59.235:8080
+              value: http://52.188.78.101:8080
             - name: KUMULUZEE_DATASOURCES0_CONNECTIONURL
-              value: jdbc:postgresql://40.114.72.255:5432/image-metadata
+              value: jdbc:postgresql://ec2-174-129-253-47.compute-1.amazonaws.com:5432/deo5eqi17pku88
             - name: KUMULUZEE_DATASOURCES0_USERNAME
-              value: dbuser
+              value: wzrxvafpsjevmb
             - name: KUMULUZEE_DATASOURCES0_PASSWORD
-              value: postgres123!
+              value: 305cca00d8fb2eed0e79b53388be223aef344750f1cdb1b6288f7d85e5c4d59f
           ports:
             - containerPort: 8080
               name: server
