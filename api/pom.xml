@@ -21,7 +21,7 @@
             <artifactId>kumuluzee-servlet-jetty</artifactId>
         </dependency>
         <dependency>
-            <artifactId>kumuluzee-config-consul</artifactId>
+            <artifactId>kumuluzee-config-etcd</artifactId>
             <groupId>com.kumuluz.ee.config</groupId>
         </dependency>
         <dependency>
