@@ -19,7 +19,7 @@ spec:
             - name: KUMULUZEE_DISCOVERY_CLUSTER
               value: rso
             - name: KUMULUZEE_DISCOVERY_ETCD_HOSTS
-                value: http://etcd:2379
+              value: http://etcd:2379
             - name: KUMULUZEE_CONFIG_ETCD_HOSTS
               value: http://etcd:2379
             - name: KUMULUZEE_SERVER_BASEURL
