@@ -11,12 +11,14 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.List;
+import java.util.logging.Logger;
 
 @ApplicationScoped
 @Path("/images")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class ImageMetadataResource {
+    private Logger log = Logger.getLogger(ImageMetadataResource.class.getName());
 
     @Inject
     private ImageMetadataBean imageMetadataBean;
@@ -26,6 +28,7 @@ public class ImageMetadataResource {
 
     @GET
     public Response getImageMetadata() {
+        log.info("GET /images called ");
 
         List<ImageMetadata> imageMetadata = imageMetadataBean.getImageMetadataFilter(uriInfo);
 
@@ -35,6 +38,7 @@ public class ImageMetadataResource {
     @GET
     @Path("/{imageMetadataId}")
     public Response getImageMetadata(@PathParam("imageMetadataId") Integer imageMetadataId) {
+        log.info("/images/{imageMetadataId} for imageMetadataId:"+imageMetadataId);
 
         ImageMetadata imageMetadata = imageMetadataBean.getImageMetadata(imageMetadataId);
 
@@ -47,6 +51,7 @@ public class ImageMetadataResource {
 
     @POST
     public Response createImageMetadata(ImageMetadata imageMetadata) {
+        log.info("POST /images for imageMetadata:"+imageMetadata);
 
         if ((imageMetadata.getTitle() == null || imageMetadata.getDescription() == null || imageMetadata.getUri() == null)) {
             return Response.status(Response.Status.BAD_REQUEST).build();
@@ -62,6 +67,7 @@ public class ImageMetadataResource {
     @Path("{imageMetadataId}")
     public Response putImageMetadata(@PathParam("imageMetadataId") Integer imageMetadataId,
                                      ImageMetadata imageMetadata) {
+        log.info("PUT /images for imageMetadataId:"+imageMetadataId);
 
         imageMetadata = imageMetadataBean.putImageMetadata(imageMetadataId, imageMetadata);
 
@@ -76,7 +82,7 @@ public class ImageMetadataResource {
     @DELETE
     @Path("{imageMetadataId}")
     public Response deleteImageMetadata(@PathParam("imageMetadataId") Integer imageMetadataId) {
-
+        log.info("DELETE /images for imageMetadataId:"+imageMetadataId);
         boolean deleted = imageMetadataBean.deleteImageMetadata(imageMetadataId);
 
         if (deleted) {

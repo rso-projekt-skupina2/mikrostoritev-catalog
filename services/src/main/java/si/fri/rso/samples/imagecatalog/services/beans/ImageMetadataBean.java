@@ -9,7 +9,6 @@ import si.fri.rso.samples.imagecatalog.models.entities.ImageMetadataEntity;
 import si.fri.rso.samples.imagecatalog.services.config.IntegrationProperties;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -21,6 +20,8 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.List;
 import java.util.Optional;
@@ -150,6 +151,7 @@ public class ImageMetadataBean {
     public Integer getCommentCount(Integer imageId) {
         if (baseUrl.isPresent()) {
             try {
+                log.info("baseUrl:" +baseUrl.get());
                 return httpClient
                         .target(baseUrl.get() + "/v1/comments/count?imageId=" + imageId)
                         .request().get(new GenericType<Integer>() {
