@@ -9,14 +9,15 @@ import javax.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class IntegrationProperties {
 
-    @ConfigValue(value = "comments-service.enabled", watch = true)
-    private boolean integrateWithCommentsService;
+    @ConfigValue(value = "recomender-service.enabled", watch = true)
+    private boolean integrateWithRecomenderService;
 
-    public boolean isIntegrateWithCommentsService() {
-        return integrateWithCommentsService;
+    public boolean isIntegrateWithRecomenderService() {
+        return integrateWithRecomenderService;
     }
 
-    public void setIntegrateWithCommentsService(boolean integrateWithCommentsService) {
-        this.integrateWithCommentsService = integrateWithCommentsService;
+
+    public void setIntegrateWithRecomenderService(boolean integrateWithRecomenderService) {
+        this.integrateWithRecomenderService = integrateWithRecomenderService;
     }
 }

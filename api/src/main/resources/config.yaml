@@ -15,10 +15,10 @@ kumuluzee:
       max-pool-size: 20
   config:
     etcd:
-      hosts: http://192.168.2.195:2379
+      hosts: http://10.10.80.79:2379
   discovery:
     etcd:
-      hosts: http://192.168.2.195:2379
+      hosts: http://10.10.80.79:2379
 configuration-properties:
-  comments-service:
+  recomender-service:
     enabled: true

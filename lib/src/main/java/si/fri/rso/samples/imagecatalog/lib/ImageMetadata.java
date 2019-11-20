@@ -7,11 +7,7 @@ public class ImageMetadata {
     private Integer imageId;
     private String title;
     private String description;
-    private Integer width;
-    private Integer height;
-    private Instant created;
     private String uri;
-    private Integer numberOfComments;
     private Integer numberOfRatings;
     private Double avergeRating;
 
@@ -31,30 +27,6 @@ public class ImageMetadata {
         this.description = description;
     }
 
-    public Integer getWidth() {
-        return width;
-    }
-
-    public void setWidth(Integer width) {
-        this.width = width;
-    }
-
-    public Integer getHeight() {
-        return height;
-    }
-
-    public void setHeight(Integer height) {
-        this.height = height;
-    }
-
-    public Instant getCreated() {
-        return created;
-    }
-
-    public void setCreated(Instant created) {
-        this.created = created;
-    }
-
     public String getUri() {
         return uri;
     }
@@ -69,14 +41,6 @@ public class ImageMetadata {
 
     public void setImageId(Integer imageId) {
         this.imageId = imageId;
-    }
-
-    public Integer getNumberOfComments() {
-        return numberOfComments;
-    }
-
-    public void setNumberOfComments(Integer numberOfComments) {
-        this.numberOfComments = numberOfComments;
     }
 
     public Integer getNumberOfRatings() {

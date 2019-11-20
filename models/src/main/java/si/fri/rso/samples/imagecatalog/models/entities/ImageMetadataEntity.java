@@ -21,15 +21,6 @@ public class ImageMetadataEntity {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "width")
-    private Integer width;
-
-    @Column(name = "height")
-    private Integer height;
-
-    @Column(name = "created")
-    private Instant created;
-
     @Column(name = "uri")
     private String uri;
 
@@ -55,30 +46,6 @@ public class ImageMetadataEntity {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public Integer getWidth() {
-        return width;
-    }
-
-    public void setWidth(Integer width) {
-        this.width = width;
-    }
-
-    public Integer getHeight() {
-        return height;
-    }
-
-    public void setHeight(Integer height) {
-        this.height = height;
-    }
-
-    public Instant getCreated() {
-        return created;
-    }
-
-    public void setCreated(Instant created) {
-        this.created = created;
     }
 
     public String getUri() {

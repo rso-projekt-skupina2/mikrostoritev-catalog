@@ -40,7 +40,7 @@ public class ImageMetadataBean {
     private Client httpClient;
 
     @Inject
-    @DiscoverService("comments-service")
+    @DiscoverService("recomender-service")
     private Optional<String> baseUrl;
 
     @Inject
@@ -79,8 +79,7 @@ public class ImageMetadataBean {
         }
 
         ImageMetadata imageMetadata = ImageMetadataConverter.toDto(imageMetadataEntity);
-        if (integrationProperties.isIntegrateWithCommentsService()) {
-            imageMetadata.setNumberOfComments(getCommentCount(id));
+        if (integrationProperties.isIntegrateWithRecomenderService()) {
             imageMetadata.setNumberOfRatings(getRatingCount(id));
             imageMetadata.setAvergeRating(getAvergeRating(id));
         }
@@ -145,23 +144,6 @@ public class ImageMetadataBean {
             return false;
 
         return true;
-    }
-
-
-    public Integer getCommentCount(Integer imageId) {
-        if (baseUrl.isPresent()) {
-            try {
-                log.info("baseUrl:" +baseUrl.get());
-                return httpClient
-                        .target(baseUrl.get() + "/v1/comments/count?imageId=" + imageId)
-                        .request().get(new GenericType<Integer>() {
-                        });
-            } catch (WebApplicationException | ProcessingException e) {
-                log.severe(e.getMessage());
-                throw new InternalServerErrorException(e);
-            }
-        }
-        return null;
     }
 
     public Integer getRatingCount(Integer imageId) {
