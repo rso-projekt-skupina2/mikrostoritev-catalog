@@ -13,7 +13,7 @@ spec:
         app: image-catalog
     spec:
       containers:
-        - image: baraba123/rso-image-catalog:1.0.0-SNAPSHOT-9.1
+        - image: baraba123/rso-image-catalog:1.0.0-SNAPSHOT-12.1
           name: image-catalog
           env:
             - name: KUMULUZEE_DISCOVERY_CLUSTER
