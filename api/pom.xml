@@ -28,6 +28,11 @@
             <groupId>si.fri.rso.samples</groupId>
             <artifactId>image-catalog-services</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20190722</version>
+        </dependency>
     </dependencies>
 
     <build>
