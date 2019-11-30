@@ -3,7 +3,6 @@ package si.fri.rso.samples.imagecatalog.api.v1.resources;
 import java.util.logging.Logger;
 import javax.enterprise.context.ApplicationScoped;
 import javax.json.Json;
-import javax.json.JsonArray;
 import javax.json.JsonBuilderFactory;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -13,6 +12,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+
+import org.eclipse.microprofile.metrics.annotation.Counted;
 
 
 @ApplicationScoped
@@ -26,6 +27,7 @@ public class ProjectInfoResource {
     protected UriInfo uriInfo;
 
     @GET
+    @Counted
     public Response getImageMetadata() {
         log.info("GET /images called ");
         JsonBuilderFactory factory = Json.createBuilderFactory(null);

@@ -13,6 +13,9 @@ import javax.ws.rs.core.UriInfo;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.eclipse.microprofile.metrics.annotation.Metered;
+import org.eclipse.microprofile.metrics.annotation.Timed;
+
 @ApplicationScoped
 @Path("/images")
 @Produces(MediaType.APPLICATION_JSON)
@@ -27,6 +30,7 @@ public class ImageMetadataResource {
     protected UriInfo uriInfo;
 
     @GET
+    @Timed
     public Response getImageMetadata() {
         log.info("GET /images called ");
 
@@ -36,6 +40,7 @@ public class ImageMetadataResource {
     }
 
     @GET
+    @Metered
     @Path("/{imageMetadataId}")
     public Response getImageMetadata(@PathParam("imageMetadataId") Integer imageMetadataId) {
         log.info("/images/{imageMetadataId} for imageMetadataId:"+imageMetadataId);
@@ -50,6 +55,7 @@ public class ImageMetadataResource {
     }
 
     @POST
+    @Timed
     public Response createImageMetadata(ImageMetadata imageMetadata) {
         log.info("POST /images for imageMetadata:"+imageMetadata);
 
@@ -64,6 +70,7 @@ public class ImageMetadataResource {
     }
 
     @PUT
+    @Timed
     @Path("{imageMetadataId}")
     public Response putImageMetadata(@PathParam("imageMetadataId") Integer imageMetadataId,
                                      ImageMetadata imageMetadata) {
@@ -80,6 +87,7 @@ public class ImageMetadataResource {
     }
 
     @DELETE
+    @Timed
     @Path("{imageMetadataId}")
     public Response deleteImageMetadata(@PathParam("imageMetadataId") Integer imageMetadataId) {
         log.info("DELETE /images for imageMetadataId:"+imageMetadataId);
