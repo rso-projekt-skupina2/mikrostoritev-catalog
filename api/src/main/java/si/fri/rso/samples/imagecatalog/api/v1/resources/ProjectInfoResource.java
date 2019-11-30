@@ -15,13 +15,14 @@ import javax.ws.rs.core.UriInfo;
 
 import org.eclipse.microprofile.metrics.annotation.Counted;
 
+import com.kumuluz.ee.logs.cdi.Log;
 
+@Log
 @ApplicationScoped
 @Path("/info")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class ProjectInfoResource {
-    private Logger log = Logger.getLogger(ImageMetadataResource.class.getName());
 
     @Context
     protected UriInfo uriInfo;
@@ -29,7 +30,6 @@ public class ProjectInfoResource {
     @GET
     @Counted
     public Response getImageMetadata() {
-        log.info("GET /images called ");
         JsonBuilderFactory factory = Json.createBuilderFactory(null);
         String jsonString = factory.createObjectBuilder()
                 .add("clani", factory.createArrayBuilder().add("js8649"))

@@ -16,12 +16,14 @@ import java.util.logging.Logger;
 import org.eclipse.microprofile.metrics.annotation.Metered;
 import org.eclipse.microprofile.metrics.annotation.Timed;
 
+import com.kumuluz.ee.logs.cdi.Log;
+
+@Log
 @ApplicationScoped
 @Path("/images")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class ImageMetadataResource {
-    private Logger log = Logger.getLogger(ImageMetadataResource.class.getName());
 
     @Inject
     private ImageMetadataBean imageMetadataBean;
@@ -30,21 +32,16 @@ public class ImageMetadataResource {
     protected UriInfo uriInfo;
 
     @GET
-    @Timed
     public Response getImageMetadata() {
-        log.info("GET /images called ");
-
         List<ImageMetadata> imageMetadata = imageMetadataBean.getImageMetadataFilter(uriInfo);
 
         return Response.status(Response.Status.OK).entity(imageMetadata).build();
     }
 
     @GET
-    @Metered
+    @Timed
     @Path("/{imageMetadataId}")
     public Response getImageMetadata(@PathParam("imageMetadataId") Integer imageMetadataId) {
-        log.info("/images/{imageMetadataId} for imageMetadataId:"+imageMetadataId);
-
         ImageMetadata imageMetadata = imageMetadataBean.getImageMetadata(imageMetadataId);
 
         if (imageMetadata == null) {
@@ -57,8 +54,6 @@ public class ImageMetadataResource {
     @POST
     @Timed
     public Response createImageMetadata(ImageMetadata imageMetadata) {
-        log.info("POST /images for imageMetadata:"+imageMetadata);
-
         if ((imageMetadata.getTitle() == null || imageMetadata.getDescription() == null || imageMetadata.getUri() == null)) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         } else {
@@ -74,8 +69,6 @@ public class ImageMetadataResource {
     @Path("{imageMetadataId}")
     public Response putImageMetadata(@PathParam("imageMetadataId") Integer imageMetadataId,
                                      ImageMetadata imageMetadata) {
-        log.info("PUT /images for imageMetadataId:"+imageMetadataId);
-
         imageMetadata = imageMetadataBean.putImageMetadata(imageMetadataId, imageMetadata);
 
         if (imageMetadata == null) {
@@ -90,7 +83,6 @@ public class ImageMetadataResource {
     @Timed
     @Path("{imageMetadataId}")
     public Response deleteImageMetadata(@PathParam("imageMetadataId") Integer imageMetadataId) {
-        log.info("DELETE /images for imageMetadataId:"+imageMetadataId);
         boolean deleted = imageMetadataBean.deleteImageMetadata(imageMetadataId);
 
         if (deleted) {
