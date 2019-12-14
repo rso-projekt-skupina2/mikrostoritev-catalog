@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: image-catalog-deployment
+  namespace: ingress-basic
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: image-catalog
+  template:
+    metadata:
+      labels:
+        app: image-catalog
+    spec:
+      containers:
+        - image: baraba123/rso-image-catalog:1.0.0-SNAPSHOT-24.1
+          name: image-catalog
+          env:
+            - name: KUMULUZEE_DISCOVERY_CLUSTER
+              value: rso
+            - name: KUMULUZEE_DISCOVERY_ETCD_HOSTS
+              value: http://etcd:2379
+            - name: KUMULUZEE_CONFIG_ETCD_HOSTS
+              value: http://etcd:2379
+            - name: KUMULUZEE_SERVER_BASEURL
+              value: http://52.149.233.158
+            - name: KUMULUZEE_DATASOURCES0_CONNECTIONURL
+              value: jdbc:postgresql://ec2-174-129-253-47.compute-1.amazonaws.com:5432/deo5eqi17pku88
+            - name: KUMULUZEE_DATASOURCES0_USERNAME
+              value: wzrxvafpsjevmb
+            - name: KUMULUZEE_DATASOURCES0_PASSWORD
+              value: 305cca00d8fb2eed0e79b53388be223aef344750f1cdb1b6288f7d85e5c4d59f
+          ports:
+            - containerPort: 80
+              name: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: server
+            initialDelaySeconds: 20
+            periodSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: server
+            initialDelaySeconds: 20
+            periodSeconds: 3
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: image-catalog
+spec:
+  type: ClusterIP
+  selector:
+    app: image-catalog
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
