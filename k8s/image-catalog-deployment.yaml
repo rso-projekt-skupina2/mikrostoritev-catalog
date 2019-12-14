@@ -26,11 +26,11 @@ spec:
             - name: KUMULUZEE_SERVER_BASEURL
               value: http://52.149.233.158
             - name: KUMULUZEE_DATASOURCES0_CONNECTIONURL
-              value: jdbc:postgresql://ec2-174-129-253-47.compute-1.amazonaws.com:5432/deo5eqi17pku88
+              value: jdbc:postgresql://salt.db.elephantsql.com:5432/fczvlzlf
             - name: KUMULUZEE_DATASOURCES0_USERNAME
-              value: wzrxvafpsjevmb
+              value: fczvlzlf
             - name: KUMULUZEE_DATASOURCES0_PASSWORD
-              value: 305cca00d8fb2eed0e79b53388be223aef344750f1cdb1b6288f7d85e5c4d59f
+              value: mEzfVgoS6XjN1dmH53038QkVewskvMyM
           ports:
             - containerPort: 80
           livenessProbe:
