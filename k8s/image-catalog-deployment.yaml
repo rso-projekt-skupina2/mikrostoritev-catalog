@@ -31,7 +31,7 @@ spec:
             - name: KUMULUZEE_DATASOURCES0_PASSWORD
               value: 305cca00d8fb2eed0e79b53388be223aef344750f1cdb1b6288f7d85e5c4d59f
           ports:
-            - containerPort: 8080
+            - containerPort: 80
               name: server
               protocol: TCP
           livenessProbe:
@@ -58,5 +58,5 @@ spec:
     app: image-catalog
   ports:
     - protocol: TCP
-      port: 8080
+      port: 80
       targetPort: server
