@@ -13,9 +13,9 @@ spec:
         paths:
           - backend:
               serviceName: image-catalog
-              servicePort: 8080
+              servicePort: 80
             path: /(.*)
           - backend:
               serviceName: recomender
-              servicePort: 8081
+              servicePort: 80
             path: /recomender(/|$)(.*)
