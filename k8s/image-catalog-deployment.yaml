@@ -33,8 +33,6 @@ spec:
               value: 305cca00d8fb2eed0e79b53388be223aef344750f1cdb1b6288f7d85e5c4d59f
           ports:
             - containerPort: 80
-              targetPort: 8080
-              protocol: TCP
           livenessProbe:
             httpGet:
               path: /health/live
