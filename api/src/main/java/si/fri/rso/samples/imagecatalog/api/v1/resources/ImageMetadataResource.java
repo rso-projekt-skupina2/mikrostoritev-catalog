@@ -2,6 +2,7 @@ package si.fri.rso.samples.imagecatalog.api.v1.resources;
 
 import si.fri.rso.samples.imagecatalog.lib.ImageMetadata;
 import si.fri.rso.samples.imagecatalog.services.beans.ImageMetadataBean;
+import si.fri.rso.samples.imagecatalog.services.streaming.EventProducerImpl;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -10,10 +11,14 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Logger;
 
-import org.eclipse.microprofile.metrics.annotation.Metered;
 import org.eclipse.microprofile.metrics.annotation.Timed;
 
 import com.kumuluz.ee.logs.cdi.Log;
@@ -30,6 +35,11 @@ public class ImageMetadataResource {
 
     @Context
     protected UriInfo uriInfo;
+
+    private Logger log = Logger.getLogger(ImageMetadataResource.class.getName());
+
+    @Inject
+    private EventProducerImpl eventProducer;
 
     @GET
     public Response getImageMetadata() {
@@ -91,6 +101,31 @@ public class ImageMetadataResource {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
     }
+    @POST
+    @Path("/upload")
+    @Consumes(MediaType.APPLICATION_OCTET_STREAM)
+    public Response uploadImage( InputStream uploadedInputStream) {
 
+        String imageId = UUID.randomUUID().toString();
+        String imageLocation = UUID.randomUUID().toString();
+
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        int nRead;
+        byte[] data = new byte[16384];
+        try {
+            while ((nRead = uploadedInputStream.read(data, 0, data.length)) != -1) {
+                buffer.write(data, 0, nRead);
+            }
+        } catch (IOException e) {
+            log.severe("Napaka pri pretvarjanju slike v byte[]!" + e);
+            return null;
+        }
+
+        // Upload image to storage
+        // Generate event for image processing
+        eventProducer.produceMessage(imageId, imageLocation);
+
+        return Response.status(Response.Status.NO_CONTENT).build();
+    }
 
 }

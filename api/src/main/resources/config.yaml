@@ -30,6 +30,17 @@ kumuluzee:
     web-instrumentation:
       - name: images-endpoint
         url-pattern: /v1/images/*
+  streaming:
+    kafka:
+      producer:
+        bootstrap-servers: localhost:9092
+        acks: all
+        retries: 0
+        batch-size: 16384
+        linger-ms: 1
+        buffer-memory: 33554432
+        key-serializer: org.apache.kafka.common.serialization.StringSerializer
+        value-serializer: org.apache.kafka.common.serialization.StringSerializer
   logs:
     config-file: '<?xml version="1.0" encoding="UTF-8"?>
                         <Configuration name="images-catalog">
