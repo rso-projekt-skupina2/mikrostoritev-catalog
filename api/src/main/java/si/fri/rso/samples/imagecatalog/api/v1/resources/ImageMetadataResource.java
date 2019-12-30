@@ -1,7 +1,9 @@
 package si.fri.rso.samples.imagecatalog.api.v1.resources;
 
+import si.fri.rso.samples.imagecatalog.api.v1.utils.ImageCatalogUtils;
 import si.fri.rso.samples.imagecatalog.lib.ImageMetadata;
 import si.fri.rso.samples.imagecatalog.services.beans.ImageMetadataBean;
+import si.fri.rso.samples.imagecatalog.services.clients.AmazonClient;
 import si.fri.rso.samples.imagecatalog.services.streaming.EventProducerImpl;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -12,7 +14,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -21,6 +22,8 @@ import java.util.logging.Logger;
 
 import org.eclipse.microprofile.metrics.annotation.Timed;
 
+import com.amazonaws.services.rekognition.model.Label;
+import com.amazonaws.util.IOUtils;
 import com.kumuluz.ee.logs.cdi.Log;
 
 @Log
@@ -41,6 +44,9 @@ public class ImageMetadataResource {
     @Inject
     private EventProducerImpl eventProducer;
 
+    @Inject
+    private AmazonClient amazonClient;
+
     @GET
     public Response getImageMetadata() {
         List<ImageMetadata> imageMetadata = imageMetadataBean.getImageMetadataFilter(uriInfo);
@@ -57,6 +63,8 @@ public class ImageMetadataResource {
         if (imageMetadata == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
+
+        imageMetadata.setTranslatedDescription(amazonClient.translate(imageMetadata.getDescription()));
 
         return Response.status(Response.Status.OK).entity(imageMetadata).build();
     }
@@ -101,31 +109,35 @@ public class ImageMetadataResource {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
     }
+
+
     @POST
     @Path("/upload")
     @Consumes(MediaType.APPLICATION_OCTET_STREAM)
-    public Response uploadImage( InputStream uploadedInputStream) {
+    public Response uploadImage( InputStream uploadedInputStream, @QueryParam("title") String title) {
 
         String imageId = UUID.randomUUID().toString();
-        String imageLocation = UUID.randomUUID().toString();
 
-        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-        int nRead;
-        byte[] data = new byte[16384];
+        byte[] data;
         try {
-            while ((nRead = uploadedInputStream.read(data, 0, data.length)) != -1) {
-                buffer.write(data, 0, nRead);
-            }
+            data = IOUtils.toByteArray(uploadedInputStream);
         } catch (IOException e) {
             log.severe("Napaka pri pretvarjanju slike v byte[]!" + e);
-            return null;
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
 
-        // Upload image to storage
-        // Generate event for image processing
-        eventProducer.produceMessage(imageId, imageLocation);
+        ImageMetadata imageMetadata = new ImageMetadata();
+        List<Label> labels = amazonClient.getLabels(data);
+        if (labels.size() >= 1) {
+            imageMetadata.setTitle(title);
+            imageMetadata.setDescription(ImageCatalogUtils.labelsToString(labels));
+            imageMetadata.setUri(" ");
+            imageMetadata = imageMetadataBean.createImageMetadata(imageMetadata);
+        }
 
-        return Response.status(Response.Status.NO_CONTENT).build();
+        eventProducer.produceMessage(imageId, imageMetadata.getDescription());
+
+        return Response.status(Response.Status.CREATED).entity(imageMetadata).build();
     }
 
 }

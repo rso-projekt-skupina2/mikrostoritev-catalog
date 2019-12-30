@@ -7,6 +7,7 @@ public class ImageMetadata {
     private Integer imageId;
     private String title;
     private String description;
+    private String translatedDescription;
     private String uri;
     private Integer numberOfRatings;
     private Double avergeRating;
@@ -57,5 +58,13 @@ public class ImageMetadata {
 
     public void setAvergeRating(Double avergeRating) {
         this.avergeRating = avergeRating;
+    }
+
+    public String getTranslatedDescription() {
+        return translatedDescription;
+    }
+
+    public void setTranslatedDescription(String translatedDescription) {
+        this.translatedDescription = translatedDescription;
     }
 }

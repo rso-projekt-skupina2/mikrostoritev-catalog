@@ -33,7 +33,7 @@ kumuluzee:
   streaming:
     kafka:
       producer:
-        bootstrap-servers: localhost:9092
+        bootstrap-servers: moped-01.srvs.cloudkafka.com:9094
         acks: all
         retries: 0
         batch-size: 16384
@@ -41,15 +41,23 @@ kumuluzee:
         buffer-memory: 33554432
         key-serializer: org.apache.kafka.common.serialization.StringSerializer
         value-serializer: org.apache.kafka.common.serialization.StringSerializer
+        security-protocol: SASL_SSL
+        sasl-jaas-config: org.apache.kafka.common.security.scram.ScramLoginModule required username="yu0eoldf" password="9WRzwOeKUMyro14oenmH_tanFVlrwEFn";
+        sasl-mechanism: SCRAM-SHA-256
+        group-id: yu0eoldf-consumer
+        enable-auto-commit: true
+        auto-commit-interval-ms: 1000
+        auto-offset-reset: earliest
+        session-timeout-ms: 30000
   logs:
     config-file: '<?xml version="1.0" encoding="UTF-8"?>
-                        <Configuration name="images-catalog">
+                        <Configuration name="image-catalog">
                             <Appenders>
                                 <Console name="console" target="SYSTEM_OUT">
                                     <PatternLayout pattern="%d %p %marker %m %X %ex %n"/>
                                 </Console>
-                                <Socket name="logstash" host="616fab46-e681-4bed-8c25-6fbca4d256d4-ls.logit.io"
-                                port="23106" protocol="tcp">
+                                <Socket name="logstash" host="29395634-d7bb-4361-9767-52afbf685c77-ls.logit.io"
+                                port="17190" protocol="tcp">
                                     <JSONLayout complete="false" compact="true" eventEol="true" charset="UTF-8" properties="true"/>
                                 </Socket>
                             </Appenders>
@@ -64,3 +72,9 @@ kumuluzee:
 configuration-properties:
   recomender-service:
     enabled: true
+app-properties:
+  external-services:
+    enabled: true
+  amazon:
+    access-key: AKIAYB5TCTPQRLLJJ2Z2
+    secret-key: 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

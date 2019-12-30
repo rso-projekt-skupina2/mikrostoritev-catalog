@@ -15,17 +15,17 @@ public class EventProducerImpl {
 
     private static final Logger log = Logger.getLogger(EventProducerImpl.class.getName());
 
-    private static final String TOPIC_NAME = "2osynm29-image_processing";
+    private static final String TOPIC_NAME = "yu0eoldf-default";
 
     @Inject
     @StreamProducer
     private Producer<String, String> producer;
 
-    public Response produceMessage(String imageId, String imageLocation) {
+    public Response produceMessage(String imageId, String imageData) {
 
         JSONObject obj = new JSONObject();
         obj.put("imageId", imageId);
-        obj.put("imageLocation", imageLocation);
+        obj.put("imageData", imageData);
         obj.put("status", "unprocessed");
 
         ProducerRecord<String, String> record = new ProducerRecord<>(TOPIC_NAME, imageId, obj.toString());
