@@ -1,6 +1,6 @@
 $(document).ready(function() {
 	$( "#imageID1" ).focusout(function() {
-		$("#viewForm").attr("action", "http://localhost:8080/v1/images/" + $("#imageID1" ).val()); //Will set it
+		$("#viewForm").attr("action", "http://159.65.210.43/image-catalog/v1/images/" + $("#imageID1" ).val()); //Will set it
 	})
 	
 	$('#rateIframe').contents().find('body').html("");
@@ -11,7 +11,7 @@ $(document).ready(function() {
 	
 
 	$( "#userId2" ).focusout(function() {
-		$("#recommendForm").attr("action", "http://localhost:8081/v1/rating/collaborative/" + $("#userId2" ).val()); 
+		$("#recommendForm").attr("action", "http://159.65.210.43/recomender/v1/rating/collaborative/" + $("#userId2" ).val()); 
 	})
 	
 	function upload_image(event){
@@ -30,7 +30,7 @@ $(document).ready(function() {
 		var form_data = new FormData();
 		form_data.append('file', file_data);
 		$.ajax({
-			url: 'http://localhost:8080/v1/images/upload2', // point to server-side controller method
+			url: 'http://159.65.210.43/image-catalog/v1/images/upload2', // point to server-side controller method
 			dataType: 'text', // what to expect back from the server
 			cache: false,
 			enctype: 'multipart/form-data',
@@ -68,7 +68,7 @@ $(document).ready(function() {
 		var uspesno="<body>Rating uspešno dodan</body>";
 		var neuspesno="<body>Napaka pri dodajanju ratinga</body>";
 		$.ajax({
-			url: 'http://localhost:8081/v1/rating/rate?imageId='+ image +'&userId='+ user +'&rating='+rating, // point to server-side controller method
+			url: 'http://159.65.210.43/recomender/v1/rating/rate?imageId='+ image +'&userId='+ user +'&rating='+rating, // point to server-side controller method
 			dataType: 'application/json', // what to expect back from the server
 			crossDomain: true,
 			headers: {"Access-Control-Allow-Origin": "*"},

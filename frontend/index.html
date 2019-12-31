@@ -67,7 +67,7 @@
         </h1>
         <div class="flex-desc">Type the id of the image you want to view.
         </div>
-        <form id="viewForm" action="http://localhost:8080/v1/images/" style="margin-left:440px;" target="view">
+        <form id="viewForm" action="http://159.65.210.43/image-catalog/v1/images/" style="margin-left:440px;" target="view">
             Image id: <input type="text" id="imageID1"><br>
             <input type="submit" value="Submit" style="margin-left:100px;">
         </form>
@@ -98,7 +98,7 @@
         <div class="flex-title">Recommend
         </div>
         <div class="flex-desc">Enter id of the user for whom you want to see recommendations.</div>
-        <form id="recommendForm" action="http://localhost:8081/v1/rating/collaborative" style="margin-left:440px;" target="recommendIframe" >
+        <form id="recommendForm" action="http://159.65.210.43/recomender/v1/rating/collaborative" style="margin-left:440px;" target="recommendIframe" >
             User id: <input type="text" id="userId2" style="margin-left:9px;"><br>
             <input id="recommend2" type="submit" value="Submit" style="margin-left:100px;">
         </form>
