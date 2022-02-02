@@ -33,7 +33,7 @@
         <kumuluzee-streaming.version>1.2.0</kumuluzee-streaming.version>
 
         <aws-java-sdk.version>1.11.685</aws-java-sdk.version>
-        <postgresql.version>42.2.8</postgresql.version>
+        <postgresql.version>42.2.25</postgresql.version>
     </properties>
 
     <repositories>
